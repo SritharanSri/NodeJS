@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const weatherRoutes = require('./routes/weatherRoutes');
-const axios = require('axios'); // Import Axios for HTTP requests
+const axios = require('axios'); 
 const WeatherStation = require('./models/WeatherStation');
 const User = require ('./models/User') 
 const authRoutes = require('./routes/authRoutes');
@@ -13,17 +13,17 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
-// Middleware
+
 app.use(bodyParser.json());
 
-// Connect to MongoDB
+
 mongoose.connect('mongodb+srv://ssrikalai2255:SriSiva1409@weatherApp.pwvrku6.mongodb.net/weathers?retryWrites=true&w=majority&appName=weatherApp', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Use weather routes
+
 app.use('/api', weatherRoutes);
 
 app.use('/api/auth', authRoutes);
@@ -37,11 +37,11 @@ app.get('/api/weather', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-// Start the server
+
 const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-// Function to set latitude and longitude based on district
+
 function setCoordinates(district) {
   let latitude, longitude;
   switch (district.toLowerCase()) {
@@ -146,7 +146,7 @@ function setCoordinates(district) {
           longitude = 80.3464;
           break;
     default:
-      // Set default coordinates if district is not found
+      
       latitude = 0;
       longitude = 0;
       break;
@@ -154,12 +154,12 @@ function setCoordinates(district) {
   return { latitude, longitude };
 }
 
-// Function to generate random weather data
+
 function generateWeatherDataForDistrict(district) {
-    const temperature = Math.floor(Math.random() * (40 - 10) + 10); // Random temperature between 10 and 40
-    const humidity = Math.floor(Math.random() * (100 - 30) + 30); // Random humidity between 30 and 100
-    const airPressure = Math.floor(Math.random() * (1100 - 900) + 900); // Random air pressure between 900 and 1100
-    const { latitude, longitude } = setCoordinates(district); // Get latitude and longitude for the district
+    const temperature = Math.floor(Math.random() * (40 - 10) + 10); 
+    const humidity = Math.floor(Math.random() * (100 - 30) + 30); 
+    const airPressure = Math.floor(Math.random() * (1100 - 900) + 900); 
+    const { latitude, longitude } = setCoordinates(district); 
   
     return {
       district,
@@ -173,44 +173,27 @@ function generateWeatherDataForDistrict(district) {
   function generateWeatherData() {
     const districts = ['colombo', 'gampaha', 'kalutara','kandy', 'matale', 'nuwara eliya','galle', 'matara', 'hambantota','jaffna', 'kilinochchi', 'mannar','mullaitivu', 'vavuniya', 'batticaloa','ampara', 'trincomalee', 'kurunegala','puttalam', 'anuradhapura', 'polonnaruwa','badulla', 'monaragala', 'ratnapura','kegalle'];
   
-    // Generate weather data for each district
     return districts.map(district => generateWeatherDataForDistrict(district));
   }
   
-  // Function to send weather data to API every minute
+  
   async function sendWeatherData() {
     const weatherDataArray = generateWeatherData();
   
     try {
-      await WeatherStation.insertMany(weatherDataArray); // Insert weather data into the database
+      await WeatherStation.insertMany(weatherDataArray); 
       console.log('Weather data inserted successfully');
     } catch (error) {
       console.error('Error inserting weather data:', error.message);
     }
   }
 
-// Function to send weather data to API
-// Function to send weather data to API
-// async function sendWeatherData() {
-//     const weatherDataArray = [];
-//     for (let i = 0; i < 25; i++) {
-//       const weatherData = generateWeatherData();
-//       weatherDataArray.push(weatherData);
-//     }
-  
-//     try {
-//       await WeatherStation.insertMany(weatherDataArray); // Assuming WeatherModel is your Mongoose model
-//       console.log('25 weather records inserted successfully');
-//     } catch (error) {
-//       console.error('Error inserting weather records:', error.message);
-//     }
-//   }
+
   
 
-// Interval to send weather data every minute
-setInterval(sendWeatherData, 60000); // Send data every 1 minute (60000 milliseconds)
+setInterval(sendWeatherData, 300000); 
 
-// Graceful shutdown
+
 process.on('SIGINT', () => {
   server.close(() => {
     console.log('Server stopped');

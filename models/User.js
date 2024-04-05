@@ -1,4 +1,4 @@
-// models/User.js
+
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true // Ensure the email field is marked as required
+    required: true 
   },
   password: {
     type: String,

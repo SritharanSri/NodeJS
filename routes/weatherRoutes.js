@@ -1,10 +1,10 @@
-// routes/weatherRoutes.js
+
 
 const express = require('express');
 const router = express.Router();
 const WeatherStation = require('../models/WeatherStation');
 
-// POST weather data from IoT weather stations
+
 router.post('/data', async (req, res) => {
   try {
     const { district, temperature, humidity, airPressure } = req.body;
@@ -130,7 +130,7 @@ router.post('/data', async (req, res) => {
   }
 });
 
-// GET weather data for display
+
 router.get('/data', async (req, res) => {
   try {
     const weatherData = await WeatherStation.find().sort({ timestamp: -1 });
