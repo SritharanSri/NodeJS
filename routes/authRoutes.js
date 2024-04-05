@@ -1,6 +1,5 @@
 // routes/authRoutes.js
 const express = require('express');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const User = require('../models/User');
 
